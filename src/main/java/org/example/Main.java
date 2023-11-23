@@ -150,35 +150,43 @@ public class Main {
             }
 
 
-            if (command.startsWith(":a")){
-                int posLin = Integer.parseInt(command.split(" ")[1]);
-                if (list == null){
-                    System.out.println("Lista ainda nao foi criada utilize o comando (:e) primeiro\n");
-                }else{
-                    System.out.println("Digite as novas linhas. Após digitar as novas linhas, utilize ':a' em uma linha vazia.");
-                    String newLine = input.nextLine();
-                    while (!newLine.equals(":a")){
-                        list.insertAt(posLin, newLine);
-                        newLine = input.nextLine();
-                        posLin++;
+            if (command.startsWith(":a")) {
+                try {
+                    int posLin = Integer.parseInt(command.split(" ")[1]);
+                    if (list == null) {
+                        System.out.println("Lista ainda nao foi criada utilize o comando (:e) primeiro\n");
+                    } else {
+                        System.out.println("Digite as novas linhas. Após digitar as novas linhas, utilize ':a' em uma linha vazia.");
+                        String newLine = input.nextLine();
+                        while (!newLine.equals(":a")) {
+                            list.insertAt(posLin, newLine);
+                            newLine = input.nextLine();
+                            posLin++;
+                        }
+                        System.out.println("Novas linhas adicionadas com sucesso.");
                     }
-                    System.out.println("Novas linhas adicionadas com sucesso.");
+                } catch (ArrayIndexOutOfBoundsException exception) {
+                    System.out.println("Epa algo deu errado, após o ':a' use um número da linha.\n");
                 }
             }
 
             if (command.startsWith(":i")){
-                String[] commandContent = command.split(" ", 3);
-                int posLin = Integer.parseInt(commandContent[1]);
-                String newLine = commandContent[2];
-                if(list == null){
-                    System.out.println("Lista ainda nao foi criada utilize o comando (:e) primeiro\n");
-                }else{
-                    System.out.println("Inserindo a nova linha na posição: " + posLin);
-                    if(posLin > 1){
-                        posLin = posLin - 2;
+                try {
+                    String[] commandContent = command.split(" ", 3);
+                    int posLin = Integer.parseInt(commandContent[1]);
+                    String newLine = commandContent[2];
+                    if (list == null) {
+                        System.out.println("Lista ainda nao foi criada utilize o comando (:e) primeiro\n");
+                    } else {
+                        System.out.println("Inserindo a nova linha na posição: " + posLin);
+                        if (posLin > 1) {
+                            posLin = posLin - 2;
+                        }
+                        list.insertAt(posLin, newLine);
+                        System.out.println("Novas linhas adicionadas com sucesso.");
                     }
-                    list.insertAt(posLin, newLine);
-                    System.out.println("Novas linhas adicionadas com sucesso.");
+                }catch (ArrayIndexOutOfBoundsException exception) {
+                    System.out.println("Epa algo deu errado, após o ':i' use um número da linha.\n");
                 }
             }
         }
