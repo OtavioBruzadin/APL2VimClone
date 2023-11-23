@@ -1,5 +1,6 @@
 package org.example;
 import java.io.FileNotFoundException;
+import java.util.Objects;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -103,45 +104,51 @@ public class Main {
 
 
             // Colocar os dois ":/" para serem uma operação só, mas diferentes ao mesmo tempo
-            if (command.startsWith(":/")){
-                String element = command.split(" ")[1];
-                if (list == null){
-                    System.out.println("Lista ainda nao foi criada utilize o comando (:e) primeiro\n");
-                }else{
-                    System.out.println("Procurando pelo elemento: " + element);
-                    Node current = list.getHead();
-                    int line = 1;
-                    do {
-                        if (current.getData().contains(element)){
-                            System.out.println(line + ". " + current.getData());
+            if (command.startsWith(":/")) {
+                try {
+                    String[] commandContent = command.split(" ");
+                    if (list == null) {
+                        System.out.println("Lista ainda nao foi criada utilize o comando (:e) primeiro\n");
+                    } else {
+                        String element = commandContent[1];
+                        if(commandContent.length == 2){
+                            System.out.println("Procurando pelo elemento: " + element);
+                            Node current = list.getHead();
+                            int line = 1;
+                            int found = 0;
+                            do {
+                                if (Objects.equals(current.getData(), element)) {
+                                    System.out.println(line + ". " + current.getData());
+                                    found = 1;
+                                }
+                                current = current.getRight();
+                                line++;
+                            } while (current != list.getHead());
+                            if (current == list.getHead() && found == 0) {
+                                System.out.println(element + " nao encontrado");
+                            }
+                        }if (commandContent.length == 3){
+                            String elem = commandContent[1];
+                            String elemTroca = commandContent[2];
+                            System.out.println("Procurando pelo elemento: " + elem + " para substituir por: " + elemTroca);
+                            Node current = list.getHead();
+                            int line = 1;
+                            do {
+                                if (Objects.equals(current.getData(), elem)){
+                                    current.setData(current.getData().replace(elem, elemTroca));
+                                    System.out.println("Elemento substituído na linha " + line + ". " + current.getData());
+                                }
+                                current = current.getRight();
+                                line++;
+                            } while (current != list.getHead());
                         }
-                        current = current.getRight();
-                        line++;
-                    } while (current != list.getHead());
+
+                    }
+                } catch (ArrayIndexOutOfBoundsException exception) {
+                    System.out.println("Epa algo deu errado tente novamente por favor\n");
                 }
             }
 
-
-            if (command.startsWith(":/")){
-                String[] commandContent = command.split(" ");
-                String elem = commandContent[1];
-                String elemTroca = commandContent[2];
-                if(list == null){
-                    System.out.println("Lista ainda nao foi criada utilize o comando (:e) primeiro\n");
-                }else{
-                    System.out.println("Procurando pelo elemento: " + elem + " para substituir por: " + elemTroca);
-                    Node current = list.getHead();
-                    int line = 1;
-                    do {
-                        if (current.getData().contains(elem)){
-                            current.setData(current.getData().replace(elem, elemTroca));
-                            System.out.println("Elemento substituído na linha " + line + ". " + current.getData());
-                        }
-                        current = current.getRight();
-                        line++;
-                    } while (current != list.getHead());
-                }
-            }
 
             if (command.startsWith(":a")){
                 int posLin = Integer.parseInt(command.split(" ")[1]);

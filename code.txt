@@ -3,6 +3,10 @@ livro
 biblioteca
 cachorro
 gato
+te
+espero
+onde
+:w code.txt
 lua
 sol
 terra
