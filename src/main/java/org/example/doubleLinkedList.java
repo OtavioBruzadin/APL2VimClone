@@ -25,15 +25,27 @@ public class doubleLinkedList {
         }
     }
 
-    public int getCount() { return count; }
-    
-    public Node getTail() {
-    	Node pAnda = head;
-    	while (pAnda.getRight() != this.head) {
-    		pAnda = pAnda.getRight();
-    	}
-    	return pAnda;
+    public boolean insertPos(Node before, String novoValor) {
+        if(head == null) {return false;}
+        Node after = before.getRight();
+        Node midle = new Node(1, novoValor, null, null);
+        before.setRight(midle);
+        midle.setLeft(before);
+        midle.setRight(after);
+        after.setLeft(midle);
+        this.count++;
+        return true;
     }
+
+    public Node getTail() {
+        Node pAnda = head;
+        while (pAnda.getRight() != this.head) {
+            pAnda = pAnda.getRight();
+        }
+        return pAnda;
+    }
+
+    public int getCount() { return count; }
 
     // Percorre a DLL em ordem crescente
     // e mostra os seus valores
@@ -174,7 +186,7 @@ public class doubleLinkedList {
 
         // Procura o elemento
         Node pAnda = this.head;
-        while (pAnda.getRight() != this.head && pAnda.getKey() != Key){
+        while (pAnda.getRight() != this.head){
             pAnda = pAnda.getRight();
         }
 
@@ -184,20 +196,6 @@ public class doubleLinkedList {
             return pAnda;
         }
     }
-    
-    public boolean insertPos(Node before, String novoValor) {
-    	if(head == null) {return false;}
-    	Node after = before.getRight();
-    	Node midle = new Node(1, novoValor, null, null);
-    	before.setRight(midle);
-    	midle.setLeft(before);
-    	midle.setRight(after);
-    	after.setLeft(midle);
-    	this.count++;
-    	return true;
-    }
-    
-    
     public Node getHead() {return this.head;}
 
     // Remove um elemento da DLL
@@ -259,6 +257,28 @@ public class doubleLinkedList {
 
         sb.append("");
         return sb.toString();
+    }
+
+    public void insertAt(int pos, String data){
+        // pos = posição onde o Node será inserido
+        // data = dado do novo Node
+        Node newNode = new Node(pos, data, null, null);
+        if (head == null){
+            head = newNode;
+            newNode.setRight(newNode);
+            newNode.setLeft(newNode);
+        }else{ // O código percorre a lista até a posição pos e insere o novo Node após o Node "Atual"
+            Node current = head;
+            int count = 1;
+            while (count < pos && current.getRight() != head){
+                current = current.getRight();
+                count++;
+            }
+            newNode.setRight(current.getRight());
+            newNode.setLeft(current.getLeft());
+            current.getRight().setLeft(newNode);
+            current.setRight(newNode);
+        }
     }
 
 }
