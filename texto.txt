@@ -1,0 +1,9 @@
+texto
+livro
+biblioteca
+cachorro
+gato
+lua
+sol
+terra
+espaco
