@@ -7,7 +7,11 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+ 
         doubleLinkedList list = null;
+        
+        doubleLinkedList transferArea = new doubleLinkedList();
+        int transInico=0, transFim=0;
 
         Scanner input = new Scanner(System.in);
         String command = "i";
@@ -31,6 +35,7 @@ public class Main {
                     System.out.println("Epa digite um arquivo por favor\n");
                 }
             }
+         // ---------------------------------------------------------------//
 
             if (command.startsWith(":w")) {
                 try {
@@ -47,7 +52,7 @@ public class Main {
                     System.out.println("Epa! informe o arquivo em que deseja escrever\n");
                 }
             }
-
+         // ---------------------------------------------------------------//
             if (command.startsWith(":x")) {
                 try {
                     String[] commandContent = command.split(" ");
@@ -64,6 +69,7 @@ public class Main {
                     System.out.println("Epa algo deu errado tente novamente\n");
                 }
             }
+         // ---------------------------------------------------------------//
             if (command.startsWith(":xG")) {
                 try {
                     String[] commandContent = command.split(" ");
@@ -82,6 +88,7 @@ public class Main {
                     System.out.println("Epa algo deu errado tente novamente\n");
                 }
             }
+         // ---------------------------------------------------------------//
             if (command.startsWith(":XG")) {
                 try {
                     String[] commandContent = command.split(" ");
@@ -101,30 +108,25 @@ public class Main {
                     System.out.println("Epa algo deu errado tente novamente\n");
                 }
             }
+         // ---------------------------------------------------------------//
             if (command.startsWith(":s")) {
                 try {
                     String[] commandContent = command.split(" ");
                     if (list == null) {
                         System.out.println("Lista ainda nao foi criada utilize o comando (:e) primeiro\n");
-                        
-                    } else if (Integer.parseInt(commandContent[2]) > list.getCount() || Integer.parseInt(commandContent[1]) < 1 || Integer.parseInt(commandContent[2]) < 1 ) {
-                        System.out.println("Epa digite uma linha valida\n");
                     } else if (commandContent.length == 3) {
                         Node current = list.getHead();
                         int length = list.getCount();
                         int i = Integer.parseInt(commandContent[1]);
-                        int j =1;
                         for (int k = 1; k <= length; k++) {
                             if (k == Integer.parseInt(commandContent[1])) {
                                 for (int m = Integer.parseInt(commandContent[1]); m <= Integer.parseInt(commandContent[2]); m++) {
                                     System.out.println(i + ". " +current.getData());
                                     current = current.getRight();
                                     i++;
-
-                                    if(j%10 == 0){
+                                    if(i%11 == 0){
                                         System.out.println("\n");
                                     }
-                                    j++;
                                 }
                             }
                             current = current.getRight();
@@ -152,6 +154,8 @@ public class Main {
                     System.out.println(exception+"Epa algo deu errado tente novamente\n");
                 }
             }
+            
+         // ---------------------------------------------------------------//
             if (command.startsWith(":/")) {
 
                 try {
@@ -197,56 +201,126 @@ public class Main {
                     System.out.println("Epa algo deu errado tente novamente por favor\n");
                 }
             }
-            if(command.startsWith(":q!")){
-                try {
-                    System.out.println("Tem certeza que quer finalizar o programa? Y:SIM | N:NAO\n");
-                    Scanner Input = new Scanner(System.in);
-                    String answear  = Input.nextLine();
-                    if (Objects.equals(answear, "Y")){
-                        functional =false;
-                    }
-                }catch (Exception exception){
-                    System.out.println("Epa algo deu errado tente novamente por favor\n");
+            
+         // ---------------------------------------------------------------//
+            if (command.startsWith(":q!")) {
+                String[] commandContent = command.split(" ");
+                if(commandContent.length != 1) {
+                	System.out.println("Numero de argumentos diferente do que esperado, utilize o comando \":help \" para mais informações ");
+                	
+                }
+                else {
+                	String resp;
+                	do {
+                		System.out.println("Você deseja sair sem salvar ? [y][n]");
+                		resp = input.nextLine();
+                		resp.toLowerCase();
+                	}while(!(resp.charAt(0) == 'y') && !(resp.charAt(0) == 'n'));
+                	if(resp.charAt(0) == 'y') {
+                		input.close();
+                		System.out.println("Encerrando o programa....");
+                		System.out.println("Programa encerrado com sucesso!");
+                		return;
+                	}
                 }
             }
-            if (command.startsWith(":a")) {
+            // ---------------------------------------------------------------//
+            if (command.startsWith(":v")) {
                 try {
-                    int posLin = Integer.parseInt(command.split(" ")[1]);
-                    if (list == null) {
-                        System.out.println("Lista ainda nao foi criada utilize o comando (:e) primeiro\n");
-                    } else {
-                        System.out.println("Digite as novas linhas. Após digitar as novas linhas, utilize ':a' para terminar.");
-                        String newLine = input.nextLine();
-                        while (!newLine.equals(":a")) {
-                            list.insertAt(posLin, newLine);
-                            newLine = input.nextLine();
-                            posLin++;
-                        }
-                        System.out.println("Novas linhas adicionadas com sucesso.");
+                    String[] commandContent = command.split(" ");
+                    if(commandContent.length != 3) {
+                    	System.out.println("Numero de argumentos diferente do que esperado, utilize o comando \":help \" para mais informações ");
                     }
-                } catch (ArrayIndexOutOfBoundsException exception) {
-                    System.out.println("Epa algo deu errado, após o ':a' use um número da linha.\n");
+                    else {
+                    	int arg1 = Integer.parseInt(commandContent[1]);
+                    	int arg2 = Integer.parseInt(commandContent[2]);
+                    	if( arg1 < 1 || arg2 > list.getCount()) throw new SecurityException();
+                    	if(arg1 > arg2) System.out.println("Valores invalidos.");
+                    	else { //copia esse intervalo para ponteiros
+                    		transInico = arg1;
+                    		transFim = arg2;
+                    	}
+                    }
+                }catch (SecurityException e){
+                    System.out.println("Valores fora da lista foram passados.");
                 }
             }
-            if (command.startsWith(":i")){
+         // ---------------------------------------------------------------//
+            if (command.startsWith(":y")) {
                 try {
-                    String[] commandContent = command.split(" ", 3);
-                    int posLin = Integer.parseInt(commandContent[1]);
-                    String newLine = commandContent[2];
-                    if (list == null) {
-                        System.out.println("Lista ainda nao foi criada utilize o comando (:e) primeiro\n");
-                    } else {
-                        System.out.println("Inserindo a nova linha na posição: " + posLin);
-                        if (posLin > 1) {
-                            posLin = posLin - 2;
-                        }
-                        list.insertAt(posLin, newLine);
-                        System.out.println("Novas linhas adicionadas com sucesso.");
+                    String[] commandContent = command.split(" ");
+                    if(commandContent.length != 1) {
+                    	System.out.println("Numero de argumentos diferente do que esperado, utilize o comando \":help \" para mais informações ");
+                    	
                     }
-                }catch (ArrayIndexOutOfBoundsException exception) {
-                    System.out.println("Epa algo deu errado, após o ':i' use um número da linha.\n");
+                    else {
+                    	Node pAnda = list.search(transInico);
+                    	Node fim = list.search(transFim);
+                    	int count=1;
+                    	while(pAnda != fim) {
+                    		transferArea.insertAscending(count++, pAnda.getData());
+                    		pAnda = pAnda.getRight();
+                    	}
+                    	transferArea.insertAscending(count++, fim.getData());
+                    	System.out.println("O testo foi copiado para a area de transferencia com sucesso!");
+                    }
+                }catch (SecurityException e){
+                    System.out.println("Um erro ocoreu. Use o comando :help para mais informações sobre esse comando.");
                 }
             }
+            
+         // ---------------------------------------------------------------//
+            if (command.startsWith(":c")) {
+                try {
+                    String[] commandContent = command.split(" ");
+                    if(commandContent.length != 1) {
+                    	System.out.println("Numero de argumentos diferente do que esperado, utilize o comando \":help \" para mais informações ");
+                    	
+                    }
+                    else {
+                    	for(int i=transInico; i<=transFim; i++) {
+                    		list.remove(i);
+                    	}
+                    	list.reList();
+                    	System.out.println("Linhas removidas com sucesso.");
+                    }
+                }catch (SecurityException e){
+                    System.out.println("Um erro ocoreu. Use o comando :help para mais informações sobre esse comando.");
+                }
+            }
+            
+            
+            
+         // ---------------------------------------------------------------//
+            if (command.startsWith(":p")) {
+                try {
+                    String[] commandContent = command.split(" ");
+                    if(commandContent.length != 2) {
+                    	System.out.println("Numero de argumentos diferente do que esperado, utilize o comando \":help \" para mais informações ");
+                    }
+                    else {
+                    	int line = Integer.parseInt(commandContent[1]);
+                    	if(line < 0 || line > list.getCount()) System.out.println("Um valor fora da lista foi passado.");
+                    	else {
+                    		Node inicio = list.search(line);
+                    		Node tail = transferArea.getTail();
+                    		Node pAnda = tail;
+                    		do {
+                    			list.insertPos(inicio, pAnda.getData());
+                    			pAnda = pAnda.getLeft();
+                    		}while(pAnda != tail);
+                    		list.reList();
+                    		System.out.println("Operação realisada com sucesso.");
+                    	}
+                    }
+                }catch (SecurityException e){
+                    System.out.println("Um erro ocoreu. Use o comando :help para mais informações sobre esse comando.");
+                }
+            }
+            
+            
+            
+         // ---------------------------------------------------------------//
             if (command.startsWith(":help")){
                 System.out.println("Digite ':e', para abrir um arquivo de nome “nomeArq.txt”, lê o seu conteúdo e armazena" +
                         "cada linha em um Node da lista encadeada circular(é necessário utilizar esse comando para executar os outros comandos). \n");
